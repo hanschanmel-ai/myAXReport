@@ -2,9 +2,11 @@ import pypyodbc as pyodbc
 import datetime
 
 class DynamicsAXConnector:
-    def __init__(self, server, database, username, password):
-        self.connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
+    def __init__(self, server, database, username=None):
+        # Use Windows Authentication
+        self.connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
         self.connection = None
+        self.username = username
         
     def connect(self):
         try:

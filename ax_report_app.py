@@ -24,6 +24,7 @@ class DynamicsAXReportApp:
         self.login_frame.pack(fill=tk.BOTH, expand=True)
         self.report_frame.pack_forget()
         
+    # In the create_login_frame method, remove password field
     def create_login_frame(self):
         self.login_frame = ttk.Frame(self.root, padding=20)
         
@@ -43,15 +44,45 @@ class DynamicsAXReportApp:
         self.db_entry.grid(row=1, column=1, pady=5, padx=5)
         self.db_entry.insert(0, "DynamicsAX")
         
-        ttk.Label(form_frame, text="Username:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        ttk.Label(form_frame, text="Username (for role check):").grid(row=2, column=0, sticky=tk.W, pady=5)
         self.username_entry = ttk.Entry(form_frame, width=30)
         self.username_entry.grid(row=2, column=1, pady=5, padx=5)
         
-        ttk.Label(form_frame, text="Password:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.password_entry = ttk.Entry(form_frame, width=30, show="*")
-        self.password_entry.grid(row=3, column=1, pady=5, padx=5)
+        # Remove password field
+        
+        ttk.Label(form_frame, text="Using Windows Authentication", font=("Arial", 10, "italic")).grid(row=3, column=0, columnspan=2, pady=5)
         
         ttk.Button(self.login_frame, text="Login", command=self.login).pack(pady=10)
+    
+    # Update the login method
+    def login(self):
+        server = self.server_entry.get()
+        database = self.db_entry.get()
+        username = self.username_entry.get()
+        
+        if not all([server, database, username]):
+            messagebox.showerror("Error", "All fields are required")
+            return
+        
+        # Create connector and try to connect using Windows Authentication
+        self.ax_connector = DynamicsAXConnector(server, database, username)
+        if not self.ax_connector.connect():
+            messagebox.showerror("Connection Error", "Failed to connect to Dynamics AX. Please check your server details and ensure you have Windows Authentication access.")
+            return
+        
+        # Get user access level
+        self.user_access = self.ax_connector.get_user_access_level(username)
+        
+        if not self.user_access['has_ar_access']:
+            messagebox.showerror("Access Denied", "You do not have access to the Accounts Receivable module.")
+            return
+        
+        # Update UI
+        self.user_label.config(text=f"User: {username} | Roles: {', '.join([r['role_name'] for r in self.user_access['roles']])}")
+        
+        # Switch to report frame
+        self.login_frame.pack_forget()
+        self.report_frame.pack(fill=tk.BOTH, expand=True)
         
     def create_report_frame(self):
         self.report_frame = ttk.Frame(self.root, padding=20)
@@ -148,9 +179,8 @@ class DynamicsAXReportApp:
         server = self.server_entry.get()
         database = self.db_entry.get()
         username = self.username_entry.get()
-        password = self.password_entry.get()
         
-        if not all([server, database, username, password]):
+        if not all([server, database, username]):
             messagebox.showerror("Error", "All fields are required")
             return
         
