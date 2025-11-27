@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ETC Wines Store — Opening Soon</title>
+  <style>
+    :root{--bg:#ffffff;--text:#111;--muted:#666;--border:#e5e5e5;--accent:#222}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+    .wrap{max-width:960px;margin:0 auto;padding:32px}
+    .hero{padding:48px 0;text-align:center}
+    .hero h1{font-size:28px;font-weight:600;margin:0 0 8px}
+    .hero p{font-size:14px;color:var(--muted);margin:0}
+    .card{border:1px solid var(--border);border-radius:8px;padding:24px;margin-top:24px}
+    .card h2{font-size:18px;margin:0 0 16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input,select{width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .phone{display:grid;grid-template-columns:160px 1fr;gap:12px}
+    .note{font-size:12px;color:#b00020;margin-top:6px;display:none}
+    .check{display:flex;align-items:center;gap:8px;margin-top:10px}
+    .actions{margin-top:16px}
+    button{padding:12px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .footer{padding:24px 0;text-align:center;color:var(--muted);font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>ETC Wines Store — Opening Soon</h1>
+      <p>Enter below details and update your account</p>
+    </div>
+    <div class="card">
+      <h2>Enter Account Details</h2>
+      <form id="signup" novalidate>
+        <div class="grid">
+          <div>
+            <label>First Name</label>
+            <input id="first" type="text" placeholder="First Name" required />
+            <div class="note" id="first-note">Please enter First Name</div>
+          </div>
+          <div>
+            <label>Last Name</label>
+            <input id="last" type="text" placeholder="Last Name" required />
+            <div class="note" id="last-note">Please enter Last Name</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" placeholder="Email" required />
+            <div class="note" id="email-note">Please enter a valid email</div>
+          </div>
+          <div class="phone">
+            <div>
+              <label>Country</label>
+              <select id="country">
+                <option value="HK">Hong Kong (+852)</option>
+                <option value="VN">Vietnam (+84)</option>
+              </select>
+            </div>
+            <div>
+              <label>Phone</label>
+              <input id="phone" type="tel" placeholder="Phone" />
+              <div class="note" id="phone-note">Please enter a valid Phone Number</div>
+            </div>
+          </div>
+        </div>
+        <div class="check">
+          <input id="optin" type="checkbox" />
+          <label for="optin">keep me updated on new updates, exclusive offers</label>
+        </div>
+        <div class="actions">
+          <button id="submit" type="button">Update account</button>
+        </div>
+      </form>
+    </div>
+    <div class="footer">© ETC Wines</div>
+  </div>
+  <script>
+    function show(el, ok){el.style.display=ok?"none":"block"}
+    function validEmail(v){return /.+@.+\..+/.test(v)}
+    function validPhone(v){return v.replace(/\D/g,"").length>=7}
+    document.getElementById("submit").addEventListener("click",()=>{
+      const f=document.getElementById("first"), l=document.getElementById("last"), e=document.getElementById("email"), p=document.getElementById("phone");
+      const fv=!!f.value.trim(); const lv=!!l.value.trim(); const ev=validEmail(e.value.trim()); const pv=!p.value.trim() || validPhone(p.value.trim());
+      show(document.getElementById("first-note"), fv);
+      show(document.getElementById("last-note"), lv);
+      show(document.getElementById("email-note"), ev);
+      show(document.getElementById("phone-note"), pv);
+      if(fv&&lv&&ev&&pv){
+        document.getElementById("submit").disabled=true;
+        setTimeout(()=>{document.getElementById("submit").disabled=false;alert("Account updated");},600);
+      }
+    });
+  </script>
+</body>
+</html>

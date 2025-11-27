@@ -1,0 +1,20 @@
+{
+  "name": "vks-shipping-rate-app",
+  "version": "1.0.0",
+  "description": "Shopify embedded app for dynamic shipping rates (HK) with composite keys",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.11",
+    "express": "^4.19.2",
+    "zod": "^3.23.8"
+  }
+}

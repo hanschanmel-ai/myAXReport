@@ -1,0 +1,71 @@
+{
+  "base": {},
+  "district": {},
+  "free_threshold_hkd": 0,
+  "default_threshold_hkd": 1500,
+  "default_fee_hkd": 200,
+  "default_threshold_op": "lt",
+  "service_standard_name": "VKS Standard",
+  "service_express_name": "VKS Express",
+  "currency": "HKD",
+  "express": {
+    "type": "multiplier",
+    "value": 1.5,
+    "free_when_standard_free": true
+  },
+  "area_overrides": {
+    "tung chung": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250,
+      "express": {
+        "type": "multiplier",
+        "value": 1.5,
+        "free_when_standard_free": true
+      }
+    },
+    "chek lap kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250,
+      "express": {
+        "type": "multiplier",
+        "value": 1.5,
+        "free_when_standard_free": true
+      }
+    },
+    "airport": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250,
+      "express": {
+        "type": "multiplier",
+        "value": 1.5,
+        "free_when_standard_free": true
+      }
+    },
+    "discovery bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250,
+      "express": {
+        "type": "multiplier",
+        "value": 1.5,
+        "free_when_standard_free": true
+      }
+    },
+    "": {
+      "scope": "region",
+      "active": true,
+      "threshold_op": "lt"
+    }
+  }
+}

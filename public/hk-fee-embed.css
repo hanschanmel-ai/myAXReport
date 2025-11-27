@@ -1,0 +1,5 @@
+#hk-fee-widget{border:1px solid #e5e5e5;padding:12px;border-radius:8px;font-family:system-ui,Arial,sans-serif}
+#hk-fee-widget .row{display:flex;gap:8px;margin-bottom:8px}
+#hk-fee-widget select{flex:1;padding:6px}
+#hk-fee-widget .status{font-size:12px;color:#555}
+
