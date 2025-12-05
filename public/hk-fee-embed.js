@@ -1,6 +1,5 @@
 async function fetchDistricts(){
-  const r=await fetch('/hk/districts');
-  return r.json();
+  try{const r=await fetch('/hk/districts');return r.json();}catch(e){if(window.HKFee&&typeof window.HKFee.getDefaultDistricts==='function')return window.HKFee.getDefaultDistricts();return {regions:{}}}
 }
 
 function createOption(text,value){
@@ -43,4 +42,3 @@ function mount(containerId){
 }
 
 window.HKFeeEmbed={mount};
-

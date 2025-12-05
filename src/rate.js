@@ -1,26 +1,27 @@
 import { loadRates } from "./admin.js";
-import { canonicalDistrict, detectRegionFromProvince, detectDistrictFromCity, regionForDistrict } from "./hkDistricts.js";
-import { detectRegionFromText } from "./hkDistricts.js";
+import { regionForDistrict } from "./hkDistricts.js";
 
 function resolveRegionAndDistrict(address) {
-  const regionGuess =
-    detectRegionFromProvince(address.province) ||
-    detectRegionFromText(address.region) ||
-    detectRegionFromText(address.city) ||
-    detectRegionFromText(address.address1) ||
-    detectRegionFromText(address.address2);
-  const districtFromCity = detectDistrictFromCity(address.city);
-  let region = regionGuess;
-  let district = districtFromCity;
-  if (!district && region) district = canonicalDistrict(address.city);
-  if (!region && district) region = regionForDistrict(district);
+  let region = String(address.province || address.region || "").trim().toLowerCase();
+  const district = String(address.city || "").trim().toLowerCase();
+  // Normalize region text by removing SAR/China suffixes
+  region = region
+    .replace(/special administrative region|s\.a\.r\.|\bsar\b|china/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Infer region from district if not one of the expected keys
+  const expected = new Set(["hong kong island","kowloon","new territories"]);
+  if (!expected.has(region)) {
+    const inferred = regionForDistrict(district);
+    if (inferred) region = inferred;
+  }
   return { region, district };
 }
 
 function calculateFeeHKD(region, district) {
   const cfg = loadRates();
   const regionKey = String(region || "").toLowerCase();
-  const districtKey = canonicalDistrict(district);
+  const districtKey = String(district || "").toLowerCase();
   const countryKey = "hk";
   let threshold = cfg.default_threshold_hkd || cfg.free_threshold_hkd || 0;
   let baseFee = cfg.default_fee_hkd || 0;

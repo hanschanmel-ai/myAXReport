@@ -1,0 +1,7 @@
+tunnel: f6eb2c3a-38aa-435d-bda6-ff2266f9fe9a
+credentials-file: "C:\\cloudflared\\f6eb2c3a-38aa-435d-bda6-ff2266f9fe9a.json"
+edge-ip-version: "4"
+ingress:
+  - hostname: app.etcwineshops.com
+    service: http://localhost:3000
+  - service: http_status:404

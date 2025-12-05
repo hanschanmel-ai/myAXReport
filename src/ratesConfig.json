@@ -2,9 +2,11 @@
   "base": {},
   "district": {},
   "free_threshold_hkd": 0,
-  "default_threshold_hkd": 1500,
-  "default_fee_hkd": 200,
+  "default_threshold_hkd": 0,
+  "default_fee_hkd": 250,
   "default_threshold_op": "lt",
+  "fallback_enabled": false,
+  "fallback_fee_hkd": 250,
   "service_standard_name": "VKS Standard",
   "service_express_name": "VKS Express",
   "currency": "HKD",
@@ -14,58 +16,885 @@
     "free_when_standard_free": true
   },
   "area_overrides": {
-    "tung chung": {
+    "hk/hong kong island/kennedy town": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/shek tong tsui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/sai ying pun": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/sheung wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/central": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/admiralty": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/mid-levels": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/peak": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/tin hau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/braemar hill": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/north point": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/quarry bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/sai wan ho": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/shau kei wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/chai wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/siu sai wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/pok fu lam": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/aberdeen": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/ap lei chau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/wong chuk hang": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/shouson hill": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/repulse bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/chung hom kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/stanley": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/tai tam": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/shek o": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/wan chai": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/causeway bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/happy valley": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/tai hang": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/so kon po": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island/jardine's lookout": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/hung hom": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/to kwa wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ma tau kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ma tau wai": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/kai tak": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/kowloon city": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ho man tin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/kowloon tong": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/beacon hill": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ping shek": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/kowloon bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ngau tau kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/jordan valley": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/kwun tong": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/sau mau ping": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/lam tin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/yau tong": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/lei yue mun": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/mei foo": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/lai chi kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/cheung sha wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/sham shui po": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/shek kip mei": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/yau yat tsuen": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/tai wo ping": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/san po kong": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/wong tai sin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/tung tau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/wang tau hom": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/lok fu": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/diamond hill": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/tsz wan shan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/ngau chi wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/tsim sha tsui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/yau ma tei": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/west kowloon reclamation": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/king's park": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/mong kok": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon/tai kok tsui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/kwai chung": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tsing yi": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/fanling": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/luen wo hui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/sheung shui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/clear water bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/sai kung": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai mong tsai": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tseung kwan o": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/hang hau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tiu keng leng": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai wai": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/sha tin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/fo tan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/ma liu shui": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/wu kai sha": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/ma on shan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai po market": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai po": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai po kau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai mei tuk": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tai lam chung": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tuen mun": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/lam tei": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/hung shui kiu": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/ha tsuen": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/lau fau shan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/tin shui wai": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/yuen long": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/san tin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/lok ma chau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/kam tin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/shek kong": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/pat heung": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/lantau island": {
       "scope": "district",
       "active": true,
       "threshold_hkd": 2000,
       "threshold_op": "lt",
-      "fee_hkd": 250,
-      "express": {
-        "type": "multiplier",
-        "value": 1.5,
-        "free_when_standard_free": true
-      }
+      "fee_hkd": 250
     },
-    "chek lap kok": {
+    "hk/new territories/airport": {
       "scope": "district",
       "active": true,
       "threshold_hkd": 2000,
       "threshold_op": "lt",
-      "fee_hkd": 250,
-      "express": {
-        "type": "multiplier",
-        "value": 1.5,
-        "free_when_standard_free": true
-      }
+      "fee_hkd": 250
     },
-    "airport": {
+    "hk/new territories/chek lap kok": {
       "scope": "district",
       "active": true,
       "threshold_hkd": 2000,
       "threshold_op": "lt",
-      "fee_hkd": 250,
-      "express": {
-        "type": "multiplier",
-        "value": 1.5,
-        "free_when_standard_free": true
-      }
+      "fee_hkd": 250
     },
-    "discovery bay": {
+    "hk/new territories/tung chung": {
       "scope": "district",
       "active": true,
       "threshold_hkd": 2000,
       "threshold_op": "lt",
-      "fee_hkd": 250,
-      "express": {
-        "type": "multiplier",
-        "value": 1.5,
-        "free_when_standard_free": true
-      }
+      "fee_hkd": 250
     },
-    "": {
+    "hk/new territories/discovery bay": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/tsuen wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/lei muk shue": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/ting kau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/sham tseng": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/tsing lung tau": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/ma wan": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/hkia": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
+    },
+    "hk/new territories/so kwun wat": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories/shatin": {
+      "scope": "district",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/hong kong island": {
       "scope": "region",
       "active": true,
-      "threshold_op": "lt"
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/kowloon": {
+      "scope": "region",
+      "active": true,
+      "threshold_hkd": 1500,
+      "threshold_op": "lt",
+      "fee_hkd": 200
+    },
+    "hk/new territories": {
+      "scope": "region",
+      "active": true,
+      "threshold_hkd": 2000,
+      "threshold_op": "lt",
+      "fee_hkd": 250
     }
-  }
+  },
+  "free_addresses": [
+    {
+      "country": "HK",
+      "region": "Hong Kong Island",
+      "city": "Sheung Wan",
+      "district": "",
+      "location_name": "Retail stores Rare & Fine Wines - Sheung Wan",
+      "address1": "207 Queen's Road Central"
+    },
+    {
+      "country": "HK",
+      "region": "Hong Kong Island",
+      "city": "Central",
+      "district": "",
+      "location_name": "Retail stores burgundy etc - Central Building",
+      "address1": "Shop 108, Central building, 1-3 pedder street"
+    },
+    {
+      "country": "HK",
+      "region": "Hong Kong Island",
+      "city": "Central",
+      "district": "",
+      "location_name": "Retail stores Rare & Fine Wines - Central",
+      "address1": "Shop L6, Lobby Floor, The Bank of East Asia Building, 10 Des Voeux Road Central"
+    }
+  ]
 }

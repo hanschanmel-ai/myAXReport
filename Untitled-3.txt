@@ -1,0 +1,3 @@
+curl -X PUT "https://open-cooks-serve.loca.lt/config/rates" \
+  -H "Content-Type: application/json" \
+  --data-binary @rates.json

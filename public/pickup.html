@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Altaya Pickup — Demo</title>
+  <link rel="stylesheet" href="/site.css" />
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+  <div class="wrap" style="max-width:840px;margin:0 auto;padding:16px">
+    <h1>Altaya Pickup — Demo</h1>
+    <p>This demo lists all Pickup locations. Selecting one will prompt to overwrite the delivery address for demonstration purposes.</p>
+    <div id="list" style="margin-bottom:16px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card" style="padding:16px">
+        <div style="font-weight:600;margin-bottom:8px">Current Delivery Address</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><div>Country</div><input id="addr_country" placeholder="HK"/></div>
+          <div><div>Region</div><input id="addr_region" placeholder="Hong Kong Island"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div><div>City/District</div><input id="addr_city" placeholder="Central"/></div>
+          <div><div>Apartment, suite, etc.</div><input id="addr_address2" placeholder=""/></div>
+        </div>
+        <div style="margin-top:8px"><div>Address</div><input id="addr_address1" placeholder="Address line"/></div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="copy_json">Copy address JSON</button>
+          <button id="clear_addr">Clear</button>
+        </div>
+        <pre id="addr_json" style="white-space:pre-wrap;margin-top:8px"></pre>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-weight:600;margin-bottom:8px">Selected Pickup Location</div>
+        <div id="selected"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function loadCfg(){ const r = await fetch('/config/rates'); return r.json() }
+    function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild }
+    function render(list){
+      const rows = list.map((e,i)=>`<tr><td>${e.location_name||e.shop_name||''}</td><td>${e.city||e.district||''}</td><td>${e.region||''}</td><td>${e.address1||''}</td><td><button data-i="${i}">Select</button></td></tr>`).join('');
+      const tbl = `<table border="1" cellpadding="6"><thead><tr><th>Location</th><th>City/District</th><th>Region</th><th>Address</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+      const root = document.getElementById('list'); root.innerHTML = tbl;
+      root.querySelectorAll('button[data-i]').forEach(btn=>{
+        btn.onclick = ()=>{
+          const i = Number(btn.getAttribute('data-i'));
+          const e = list[i]||{};
+          const msg = `Proceed with Pickup at "${e.location_name||e.shop_name||e.address1||'Pickup Location'}"?\n\nThis will overwrite your delivery address with the pickup location.`;
+          if (confirm(msg)){
+            document.getElementById('selected').innerHTML = `<div><div>Location: ${e.location_name||e.shop_name||''}</div><div>Region: ${e.region||''}</div><div>City/District: ${e.city||e.district||''}</div><div>Address: ${e.address1||''}</div></div>`;
+            document.getElementById('addr_country').value = (e.country||'HK');
+            document.getElementById('addr_region').value = (e.region||'');
+            document.getElementById('addr_city').value = (e.city||e.district||'');
+            document.getElementById('addr_address1').value = (e.address1||'');
+            document.getElementById('addr_address2').value = '';
+            buildJson();
+            const payload = { destination: {
+              country: document.getElementById('addr_country').value||'',
+              province: document.getElementById('addr_region').value||'',
+              region: document.getElementById('addr_region').value||'',
+              city: document.getElementById('addr_city').value||'',
+              address1: document.getElementById('addr_address1').value||'',
+              address2: document.getElementById('addr_address2').value||''
+            } };
+            fetch('/proxy/pickup/select',{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+          }
+        };
+      });
+    }
+    function buildJson(){
+      const obj = {
+        destination: {
+          country: document.getElementById('addr_country').value||'',
+          province: document.getElementById('addr_region').value||'',
+          region: document.getElementById('addr_region').value||'',
+          city: document.getElementById('addr_city').value||'',
+          address1: document.getElementById('addr_address1').value||'',
+          address2: document.getElementById('addr_address2').value||''
+        }
+      };
+      document.getElementById('addr_json').textContent = JSON.stringify(obj, null, 2);
+    }
+    document.addEventListener('input', (ev)=>{
+      if(['addr_country','addr_region','addr_city','addr_address1','addr_address2'].includes(ev.target.id)) buildJson();
+    });
+    document.getElementById('copy_json')?.addEventListener('click', ()=>{
+      const txt = document.getElementById('addr_json').textContent||'';
+      if(txt){ navigator.clipboard.writeText(txt); }
+    });
+    document.getElementById('clear_addr')?.addEventListener('click', ()=>{
+      ['addr_country','addr_region','addr_city','addr_address1','addr_address2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+      buildJson();
+    });
+    (async()=>{ const cfg = await loadCfg(); const list = Array.isArray(cfg.free_addresses)?cfg.free_addresses:[]; render(list) })();
+  </script>
+</body>
+</html>
