@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ERP Prototype Suite — NetSuite Style</title>
+  <link href="./style.css" rel="stylesheet">
+  <link href="./ns-main.css" rel="stylesheet">
+  <link href="./ns-item.css" rel="stylesheet">
+</head>
+<body>
+  <div class="topbar ns-topnav">
+    <div class="brand">EP-001 ERP</div>
+    <div class="menu">
+      <div class="top-item"><a href="#dashboard" onclick="return navigate('#dashboard')">Activities</a>
+        <div class="ns-dropdown">
+          <a href="#dashboard">Dashboard</a>
+          <a href="#login">Login</a>
+        </div>
+      </div>
+      <div class="top-item"><a href="#po" onclick="return navigate('#po')">Transactions</a>
+        <div class="ns-dropdown">
+          <a href="#po" onclick="return navigate('#po')">Purchase (PO)</a>
+          <a href="#so" onclick="return navigate('#so')">Sales (SO)</a>
+          <a href="#gl" onclick="return navigate('#gl')">Finance (GL)</a>
+          <a href="#movements" onclick="return navigate('#movements')">Inventory</a>
+        </div>
+      </div>
+      <script>
+        (function(){
+          function q(sel){return document.querySelector(sel)}
+          window.showTabById = function(id){
+            var form = q('#item-master .ns-item-form');
+            if(!form)return;
+            var tabs = form.querySelectorAll('.tabs .tab');
+            for(var i=0;i<tabs.length;i++){tabs[i].classList.remove('active')}
+            var panels = form.querySelectorAll('div[id^="tab-"]');
+            for(var j=0;j<panels.length;j++){panels[j].style.display='none'}
+            var tab = form.querySelector('.tabs .tab[data-tab="'+id+'"]');
+            if(tab)tab.classList.add('active');
+            var panel = document.getElementById(id);
+            if(panel)panel.style.display='block'
+          };
+        })();
+      </script>
+      <div class="top-item"><a href="#coa" onclick="return navigate('#coa')">Lists</a>
+        <div class="ns-dropdown">
+          <a href="#coa" onclick="return navigate('#coa')">Account</a>
+          <a href="#item-master" onclick="return navigate('#item-master')">Item</a>
+          <a href="#ar" onclick="return navigate('#ar')">Customer</a>
+          <a href="#ap" onclick="return navigate('#ap')">Vendor</a>
+        </div>
+      </div>
+      <div class="top-item"><a href="#report-sales" onclick="return navigate('#report-sales')">Reports</a>
+        <div class="ns-dropdown">
+          <div class="has-sub"><a href="#report-sales">Sales ▸</a>
+            <div class="ns-subdropdown">
+              <a href="#report-sales-customer" onclick="return navigate('#report-sales-customer')">Sales by Customer</a>
+              <a href="#report-sales-item" onclick="return navigate('#report-sales-item')">Sales by Item</a>
+            </div>
+          </div>
+          <div class="has-sub"><a href="#report-purchase">Purchase ▸</a>
+            <div class="ns-subdropdown">
+              <a href="#report-purchase-vendor" onclick="return navigate('#report-purchase-vendor')">Purchase by Vendor</a>
+              <a href="#report-purchase-item" onclick="return navigate('#report-purchase-item')">Purchase by Item</a>
+            </div>
+          </div>
+          <a href="#report-finance" onclick="return navigate('#report-finance')">Finance</a>
+        </div>
+      </div>
+      <div class="top-item"><a href="#company" onclick="return navigate('#company')">Setup</a>
+        <div class="ns-dropdown">
+          <a href="#company" onclick="return navigate('#company')">Company setup</a>
+          <a href="#admin" onclick="return navigate('#admin')">Accounting</a>
+          <a href="#setup-sales" onclick="return navigate('#setup-sales')">Sales Group setup</a>
+          <a href="#locations" onclick="return navigate('#locations')">Warehouse & location</a>
+        </div>
+      </div>
+      <div class="top-item"><a href="#customization" onclick="return navigate('#customization')">Customization</a>
+        <div class="ns-dropdown">
+          <a href="#customization">Entity — List, Record & Field</a>
+          <a href="#customization">Form — Transaction form customization</a>
+          <a href="#customization">Translation — Multi-language labels</a>
+        </div>
+      </div>
+      <div class="top-item"><a href="#support" onclick="return navigate('#support')">Support</a>
+        <div class="ns-dropdown">
+          <a href="#support" onclick="return navigate('#support')">Online support case form</a>
+          <a href="#ai" onclick="return navigate('#ai')">AI Assistant</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-left:auto;color:#fff;font-size:12px;">User: <span id="userName">Guest</span></div>
+  </div>
+  
+  <div class="layout">
+    <main class="content">
+      <div class="panel page" id="login">
+        <h2>Login</h2>
+        <div class="row">
+          <div class="field"><label>Name</label><input id="login_name" type="text" placeholder="Your name"></div>
+          <div class="field"><label>Email</label><input id="login_email" type="email" placeholder="you@company.com"></div>
+        </div>
+        <button class="btn" id="login_btn">Login</button>
+        <div class="muted" style="margin-top:8px;">This is a prototype login (stores user locally).</div>
+      </div>
+
+      <div class="panel page" id="dashboard" style="display:none;">
+        <h2>Dashboard</h2>
+        <div class="kpi">
+          <div class="card"><div class="muted">Companies</div><div class="num" id="kpi_companies">—</div></div>
+          <div class="card"><div class="muted">Items</div><div class="num" id="kpi_items">—</div></div>
+          <div class="card"><div class="muted">AP Bills (Open)</div><div class="num" id="kpi_ap">—</div></div>
+          <div class="card"><div class="muted">AR Invoices (Open)</div><div class="num" id="kpi_ar">—</div></div>
+        </div>
+        <div class="muted">Use the left navigation to configure and test flows.</div>
+      </div>
+
+      <div class="panel page" id="company" style="display:none;">
+        <h2>Company Setup</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="cmp_code" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Legal Name</label><input id="cmp_name" type="text" placeholder="Acme Hong Kong Island"></div>
+          <div class="field"><label>Country</label><input id="cmp_country" type="text" placeholder="Hong Kong"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Base Currency</label><input id="cmp_currency" type="text" placeholder="HKD"></div>
+          <div class="field"><label>Timezone</label><input id="cmp_tz" type="text" placeholder="Asia/Hong_Kong"></div>
+          <div class="field"><label>Languages</label><input id="cmp_lang" type="text" placeholder="en, zh-HK"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Fiscal Start Month</label>
+            <select id="cmp_fiscal_start"><option value="1">Jan</option><option value="4">Apr</option><option value="7">Jul</option><option value="10">Oct</option></select>
+          </div>
+          <div class="field"><label>Fiscal Periods</label>
+            <select id="cmp_fiscal_periods"><option value="12">12</option><option value="13">13</option></select>
+          </div>
+          <div class="field"><label>Accounting Context</label><input id="cmp_context" type="text" placeholder="Local GAAP"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Tax Regime</label><input id="cmp_tax_regime" type="text" placeholder="VAT/GST"></div>
+          <div class="field"><label>Default Tax Rate %</label><input id="cmp_tax_rate" type="number" step="0.01" placeholder="0"></div>
+          <div class="field"><label>Enable Multi-Book</label>
+            <select id="cmp_multibook"><option>No</option><option>Yes</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Primary Book Name</label><input id="cmp_book_primary" type="text" placeholder="Primary"></div>
+          <div class="field"><label>Secondary Book Name</label><input id="cmp_book_secondary" type="text" placeholder="Statutory"></div>
+          <div class="field"><label>Number Series (SO/PO/INV)</label><input id="cmp_series" type="text" placeholder="SO-HKI-,PO-HKI-,INV-HKI-"></div>
+        </div>
+        <button class="btn" id="cmp_add">Add Company</button>
+        <div class="panel" style="margin-top:12px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">Subsidiaries</h2>
+          <div class="row">
+            <div class="field"><label>Parent Company Code</label><input id="sub_parent" type="text" placeholder="HKI"></div>
+            <div class="field"><label>Subsidiary Code</label><input id="sub_code" type="text" placeholder="HKI-Store1"></div>
+            <div class="field"><label>Subsidiary Name</label><input id="sub_name" type="text" placeholder="HKI Store 1"></div>
+            <div class="field"><label>Currency</label><input id="sub_currency" type="text" placeholder="HKD"></div>
+          </div>
+          <button class="btn" id="sub_add">Add Subsidiary</button>
+        </div>
+        <table class="grid" id="cmp_table" style="margin-top:8px;">
+          <thead><tr><th>Code</th><th>Name</th><th>Currency</th><th>Timezone</th><th>Country</th><th>Languages</th><th>Context</th><th>Multi-Book</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="po" style="display:none;">
+        <h2>Purchase Orders</h2>
+        <div class="row">
+          <div class="field"><label>Company</label><input id="po_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Vendor</label><input id="po_vendor" type="text" placeholder="VEND01"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Item SKU</label><input id="po_sku" type="text" placeholder="SKU123"></div>
+          <div class="field"><label>Qty</label><input id="po_qty" type="number" value="1"></div>
+          <div class="field"><label>Price</label><input id="po_price" type="number" step="0.01" value="0"></div>
+        </div>
+        <button class="btn" id="po_add">Create PO</button>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">POs</h2>
+          <div class="row"><div class="field"><label>Filter PO</label><input id="po_filter" type="text" placeholder="PO-HKI-2025-00001"></div></div>
+          <table class="grid" id="po_table"><thead><tr><th>PO#</th><th>Company</th><th>Vendor</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="row">
+          <div class="field"><label>Receive PO#</label><input id="po_recv_no" type="text" placeholder="PO-HKI-2025-00001"></div>
+          <div class="field"><label>Location</label><input id="po_recv_loc" type="text" placeholder="MAIN"></div>
+        </div>
+        <button class="btn" id="po_recv">Receive</button>
+      </div>
+
+      <div class="panel page" id="so" style="display:none;">
+        <h2>Sales Orders</h2>
+        <div class="row">
+          <div class="field"><label>Company</label><input id="so_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Customer</label><input id="so_customer" type="text" placeholder="CUS01"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Item SKU</label><input id="so_sku" type="text" placeholder="SKU123"></div>
+          <div class="field"><label>Qty</label><input id="so_qty" type="number" value="1"></div>
+        </div>
+        <button class="btn" id="so_add">Create SO</button>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">SOs</h2>
+          <table class="grid" id="so_table"><thead><tr><th>SO#</th><th>Company</th><th>Customer</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="row">
+          <div class="field"><label>Ship SO#</label><input id="so_ship_no" type="text" placeholder="SO-HKI-2025-00001"></div>
+          <div class="field"><label>Location</label><input id="so_ship_loc" type="text" placeholder="MAIN"></div>
+        </div>
+        <button class="btn" id="so_ship">Ship</button>
+      </div>
+
+      <div class="panel page" id="coa" style="display:none;">
+        <h2>Chart of Accounts</h2>
+        <div class="row">
+          <div class="field"><label>View</label>
+            <select id="coa_view"><option>Basic</option><option>Detailed</option></select>
+          </div>
+          <div class="field"><label>Actions</label>
+            <button class="btn" id="coa_new">New</button>
+            <label style="margin-left:12px;font-size:12px;">
+              <input type="checkbox" id="coa_show_inactives"> Show Inactives
+            </label>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:8px;">
+          <div class="row">
+            <div class="field"><label>NAME</label><input id="coa_name" type="text" placeholder="Cash"></div>
+            <div class="field"><label>SUBACCOUNT OF</label><input id="coa_parent" type="text" placeholder="Type then tab (parent code)"></div>
+            <div class="field"><label>TYPE</label>
+              <select id="coa_type"></select>
+            </div>
+            <div class="field"><label>CURRENCY</label><input id="coa_currency" type="text" placeholder="HKD"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>GENERAL RATE TYPE</label>
+              <select id="coa_grt"><option>Current</option><option>Historical</option><option>Average</option></select>
+            </div>
+            <div class="field"><label>CASH FLOW RATE TYPE</label>
+              <select id="coa_cfrt"><option>Average</option><option>Historical</option><option>Current</option></select>
+            </div>
+            <div class="field"><label>INVENTORY</label>
+              <select id="coa_inventory"><option>No</option><option>Yes</option></select>
+            </div>
+            <div class="field"><label>SUMMARY</label>
+              <select id="coa_summary"><option>No</option><option>Yes</option></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field"><label>INACTIVE</label>
+              <select id="coa_inactive"><option>No</option><option>Yes</option></select>
+            </div>
+            <div class="field"><label>DESCRIPTION</label><input id="coa_desc" type="text" placeholder="Optional description"></div>
+            <div class="field"><label>ACCOUNT CODE</label><input id="coa_code" type="text" placeholder="1000"></div>
+            <div class="field"><label>SUBSIDIARIES</label><input id="coa_subs" type="text" placeholder="Type & tab for single value"></div>
+          </div>
+          <div class="row">
+            <div class="field"><label>BOOK AVAILABILITY</label>
+              <select id="coa_book"><option>Primary Only</option><option>Secondary Only</option><option>Both</option></select>
+            </div>
+            <div class="field"><label>RESTRICT TO DEPARTMENT</label><input id="coa_r_dept" type="text" placeholder="Type then tab"></div>
+            <div class="field"><label>RESTRICT TO CLASS</label><input id="coa_r_class" type="text" placeholder="Type then tab"></div>
+            <div class="field"><label>RESTRICT TO LOCATION</label><input id="coa_r_loc" type="text" placeholder="Type then tab"></div>
+          </div>
+          <div class="row" id="bank_row" style="display:none;">
+            <div class="field"><label>BANK NAME</label><input id="coa_bank_name" type="text"></div>
+            <div class="field"><label>BANK ROUTING NUMBER</label><input id="coa_bank_routing" type="text"></div>
+            <div class="field"><label>BANK ACCOUNT NUMBER</label><input id="coa_bank_account" type="text"></div>
+          </div>
+          <div class="row">
+            <button class="btn" id="coa_save" onclick="saveAccount()">Save</button>
+            <button class="btn secondary" id="coa_cancel">Cancel</button>
+          </div>
+        </div>
+        <table class="grid" id="coa_table" style="margin-top:8px;">
+          <thead>
+            <tr>
+              <th>Edit</th><th>View</th><th>Summary</th><th>Internal ID</th><th>Account</th><th>Type</th><th>Description</th><th>Currency</th><th>Inactive</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h2 style="margin-top:16px;">Posting Profiles</h2>
+        <div class="row">
+          <div class="field"><label>Item Group</label><input id="pp_item_group" type="text" placeholder="Finished Goods"></div>
+          <div class="field"><label>Asset Account</label><input id="pp_asset" type="text" placeholder="1200"></div>
+          <div class="field"><label>COGS Account</label><input id="pp_cogs" type="text" placeholder="5000"></div>
+          <div class="field"><label>Income Account</label><input id="pp_income" type="text" placeholder="4000"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="pp_add" onclick="addPostingProfile()">Save Profile</button></div>
+        </div>
+        <table class="grid" id="pp_table" style="margin-top:8px;">
+          <thead><tr><th>Item Group</th><th>Asset</th><th>COGS</th><th>Income</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <h2 style="margin-top:16px;">Vendor Posting Profiles</h2>
+        <div class="row">
+          <div class="field"><label>Vendor Code</label><input id="pp_vendor_code" type="text" placeholder="V001"></div>
+          <div class="field"><label>GRNI Account</label><input id="pp_vendor_grni" type="text" placeholder="2100"></div>
+          <div class="field"><label>Price Variance</label><input id="pp_vendor_var" type="text" placeholder="5900"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" onclick="addVendorPostingProfile()">Save Vendor Profile</button></div>
+        </div>
+        <table class="grid" id="pp_vendor_table" style="margin-top:8px;">
+          <thead><tr><th>Vendor</th><th>GRNI</th><th>Price Variance</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <h2 style="margin-top:16px;">Customer Posting Profiles</h2>
+        <div class="row">
+          <div class="field"><label>Customer Code</label><input id="pp_customer_code" type="text" placeholder="C001"></div>
+          <div class="field"><label>Revenue Account</label><input id="pp_customer_rev" type="text" placeholder="4000"></div>
+          <div class="field"><label>Discount Account</label><input id="pp_customer_disc" type="text" placeholder="4500"></div>
+          <div class="field"><label>Freight Account</label><input id="pp_customer_freight" type="text" placeholder="4600"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" onclick="addCustomerPostingProfile()">Save Customer Profile</button></div>
+        </div>
+        <table class="grid" id="pp_customer_table" style="margin-top:8px;">
+          <thead><tr><th>Customer</th><th>Revenue</th><th>Discount</th><th>Freight</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="item-master" style="display:none;">
+        <h2>Inventory</h2>
+        <div class="panel ns-panel ns-item-form" style="margin-top:8px;">
+          <div class="tabs">
+            <button type="button" class="tab active" data-tab="tab-main" onclick="showTabById('tab-main')">Main</button>
+            <button type="button" class="tab" data-tab="tab-purch" onclick="showTabById('tab-purch')">Purchasing</button>
+            <button type="button" class="tab" data-tab="tab-sales" onclick="showTabById('tab-sales')">Sales & Pricing</button>
+            <button type="button" class="tab" data-tab="tab-inv" onclick="showTabById('tab-inv')">Inventory</button>
+            <button type="button" class="tab" data-tab="tab-acct" onclick="showTabById('tab-acct')">Accounting</button>
+            <button type="button" class="tab" data-tab="tab-compliance" onclick="showTabById('tab-compliance')">Compliance</button>
+            <button type="button" class="tab" data-tab="tab-class" onclick="showTabById('tab-class')">Classification</button>
+          </div>
+          <div id="tab-main">
+            <div class="row">
+              <div class="field"><label>Item Name/Number (SKU)</label><input id="itm_sku" type="text" placeholder="SKU123"></div>
+              <div class="field"><label>Display Name</label><input id="itm_display" type="text" placeholder="Widget A"></div>
+              <div class="field"><label>Type</label><select id="itm_type"><option>Inventory</option><option>Non-Inventory</option><option>Service</option></select></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Description</label><input id="itm_desc" type="text" placeholder="Short description"></div>
+              <div class="field"><label>Subsidiaries</label><input id="itm_subs" type="text" placeholder="HKI,KOW"></div>
+              <div class="field"><label>Inactive</label><select id="itm_inactive"><option>No</option><option>Yes</option></select></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Item Group</label><input id="itm_group" type="text" placeholder="Finished Goods"></div>
+              <div class="field"><label>Vendor Item No.</label><input id="itm_vendor_item" type="text" placeholder="V-123"></div>
+              <div class="field"><label>Customer Item No.</label><input id="itm_customer_item" type="text" placeholder="C-123"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Barcode/GTIN</label><input id="itm_barcode" type="text" placeholder="4891234567890"></div>
+            </div>
+          </div>
+          <div id="tab-purch" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Preferred Vendor</label><input id="itm_vendor" type="text" placeholder="V001"></div>
+              <div class="field"><label>Purchase Price</label><input id="itm_purchase_price" type="number" step="0.01" placeholder="0"></div>
+              <div class="field"><label>Purchase UOM</label><input id="itm_puom" type="text" placeholder="EA"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Min Order Qty</label><input id="itm_po_min" type="number" step="1" placeholder="0"></div>
+              <div class="field"><label>Max Order Qty</label><input id="itm_po_max" type="number" step="1" placeholder="0"></div>
+              <div class="field"><label>Order Multiple</label><input id="itm_po_mult" type="number" step="1" placeholder="0"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Lead Time (days)</label><input id="itm_po_lead" type="number" step="1" placeholder="0"></div>
+            </div>
+          </div>
+          <div id="tab-sales" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Base Price</label><input id="itm_base_price" type="number" step="0.01" placeholder="0"></div>
+              <div class="field"><label>Tax Schedule</label><input id="itm_tax" type="text" placeholder="Standard"></div>
+              <div class="field"><label>Sales UOM</label><input id="itm_suom" type="text" placeholder="EA"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Reservation Policy</label><select id="itm_reservation"><option>Manual</option><option>Automatic</option></select></div>
+            </div>
+          </div>
+          <div id="tab-inv" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Base UOM</label><input id="itm_uom" type="text" placeholder="EA"></div>
+              <div class="field"><label>Costing Method</label><select id="itm_costing"><option>FIFO</option><option>Weighted Average</option><option>Moving Average</option><option>Standard</option></select></div>
+              <div class="field"><label>Default Location</label><input id="itm_def_loc" type="text" placeholder="MAIN"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Reorder Point</label><input id="itm_reorder" type="number" step="1" placeholder="0"></div>
+              <div class="field"><label>Min</label><input id="itm_min" type="number" step="1" placeholder="0"></div>
+              <div class="field"><label>Max</label><input id="itm_max" type="number" step="1" placeholder="0"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Weight (kg)</label><input id="itm_weight" type="number" step="0.001" placeholder="0"></div>
+              <div class="field"><label>Dimensions (LxWxH)</label><input id="itm_dims" type="text" placeholder="10x5x2"></div>
+              <div class="field"><label>Default Bin</label><input id="itm_def_bin" type="text" placeholder="A-01"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Default Warehouse</label><input id="itm_def_wh" type="text" placeholder="WH1"></div>
+              <div class="field"><label>Track Batch</label><select id="itm_track_batch"><option>No</option><option>Yes</option></select></div>
+              <div class="field"><label>Track Serial</label><select id="itm_track_serial"><option>No</option><option>Yes</option></select></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Shelf Life (days)</label><input id="itm_shelf_life" type="number" step="1" placeholder="0"></div>
+            </div>
+          </div>
+          <div id="tab-acct" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Asset Account (Inventory)</label><input id="itm_asset_acc" type="text" placeholder="1200"></div>
+              <div class="field"><label>COGS Account</label><input id="itm_cogs_acc" type="text" placeholder="5000"></div>
+              <div class="field"><label>Income Account</label><input id="itm_income_acc" type="text" placeholder="4000"></div>
+            </div>
+          </div>
+          <div id="tab-compliance" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Tax Item Group</label><input id="itm_tax_group" type="text" placeholder="TAX-GRP"></div>
+              <div class="field"><label>Commodity Code</label><input id="itm_commodity" type="text" placeholder="HS-1234"></div>
+              <div class="field"><label>Country of Origin</label><input id="itm_origin" type="text" placeholder="HK"></div>
+            </div>
+          </div>
+          <div id="tab-class" style="display:none;">
+            <div class="row">
+              <div class="field"><label>Department</label><input id="itm_dept" type="text" placeholder="Sales"></div>
+              <div class="field"><label>Class</label><input id="itm_class" type="text" placeholder="Retail"></div>
+              <div class="field"><label>Location</label><input id="itm_class_loc" type="text" placeholder="HKI"></div>
+            </div>
+          </div>
+            <div class="row">
+            <button class="btn" id="itm_save" onclick="saveItem()">Save Item</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Filter Items</label><input id="item_filter" type="text" placeholder="Search..."></div>
+          <div class="field"><label>Type</label><select id="item_filter_type"><option value="">All</option><option>Inventory</option><option>Non-Inventory</option><option>Service</option></select></div>
+          <div class="field"><label>Subsidiary</label><input id="item_filter_subs" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Bulk Actions</label><button class="btn secondary" id="items_delete_selected">Delete Selected</button></div>
+        </div>
+        <table class="grid" id="itm_table" style="margin-top:8px;">
+          <thead><tr><th>Sel</th><th>Edit</th><th>SKU</th><th>Display Name</th><th>Type</th><th>Base UOM</th><th>Asset</th><th>COGS</th><th>Income</th><th>Vendor</th><th>Inactive</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <h2 style="font-size:16px;margin:12px 0 8px;">Items CSV Import</h2>
+        <div class="row">
+          <div class="field"><label>CSV File</label><input id="items_csv" type="file" accept=".csv"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="items_preview_csv">Preview CSV</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="items_import">Import Items CSV</button></div>
+        </div>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">CSV Mapping Guide</h2>
+          <div class="muted">Expected columns: SKU, DisplayName, Type, UOM, AssetAccount, COGSAccount, IncomeAccount, Vendor, PurchasePrice, PurchaseUOM, BasePrice, TaxSchedule, SalesUOM, CostingMethod, DefaultLocation, Reorder, Min, Max, Weight, Dimensions, DefaultBin, Department, Class, ClassLocation, Subsidiaries(semicolon-separated), Inactive(Yes/No)</div>
+        </div>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">CSV Preview (first 5 rows)</h2>
+          <table class="grid" id="items_csv_preview">
+            <thead><tr><th>#</th><th>Row</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">Import Errors</h2>
+          <table class="grid" id="items_import_errors">
+            <thead><tr><th>Line</th><th>Error</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel page" id="movements" style="display:none;">
+        <h2>Inventory Movements</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="mv_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Location</label><input id="mv_location" type="text" placeholder="Main"></div>
+          <div class="field"><label>SKU</label><input id="mv_sku" type="text" placeholder="SKU123"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Qty</label><input id="mv_qty" type="number" step="1" value="1"></div>
+          <div class="field"><label>Direction</label><select id="mv_dir"><option>in</option><option>out</option></select></div>
+          <div class="field"><label>Reason</label><input id="mv_reason" type="text" placeholder="Adjustment"></div>
+        </div>
+        <button class="btn" id="mv_add">Record Movement</button>
+        <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
+        <h2 style="font-size:16px;margin:0 0 8px;">Transfer</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="tr_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Item SKU</label><input id="tr_sku" type="text" placeholder="SKU123"></div>
+          <div class="field"><label>Qty</label><input id="tr_qty" type="number" step="1" value="1"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>From Location</label><input id="tr_from_loc" type="text" placeholder="MAIN"></div>
+          <div class="field"><label>From Bin</label><input id="tr_from_bin" type="text" placeholder="A-01"></div>
+          <div class="field"><label>To Location</label><input id="tr_to_loc" type="text" placeholder="MAIN2"></div>
+          <div class="field"><label>To Bin</label><input id="tr_to_bin" type="text" placeholder="B-01"></div>
+        </div>
+        <button class="btn" id="tr_add">Record Transfer</button>
+        <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
+        <h2 style="font-size:16px;margin:0 0 8px;">Adjustment</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="adj_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Location</label><input id="adj_location" type="text" placeholder="MAIN"></div>
+          <div class="field"><label>Bin</label><input id="adj_bin" type="text" placeholder="A-01"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Item SKU</label><input id="adj_sku" type="text" placeholder="SKU123"></div>
+          <div class="field"><label>Qty (+/-)</label><input id="adj_qty" type="number" step="1" value="-1"></div>
+          <div class="field"><label>Adjustment Account</label><input id="adj_acc" type="text" placeholder="5700"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Reason</label><input id="adj_reason" type="text" placeholder="Write-off"></div>
+          <div class="field"><label>Reference</label><input id="adj_ref" type="text" placeholder="Doc#"></div>
+        </div>
+        <button class="btn" id="adj_add">Record Adjustment</button>
+        <table class="grid" id="bal_table" style="margin-top:8px;">
+          <thead><tr><th>Company</th><th>Location</th><th>SKU</th><th>On Hand</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="locations" style="display:none;">
+        <h2>Locations & Bins</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="loc_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Location Code</label><input id="loc_code" type="text" placeholder="MAIN"></div>
+          <div class="field"><label>Name</label><input id="loc_name" type="text" placeholder="Main Warehouse"></div>
+        </div>
+        <button class="btn" id="loc_add">Add Location</button>
+        <div class="row"><div class="field"><label>Filter Locations</label><input id="loc_filter" type="text" placeholder="Search..."></div></div>
+        <table class="grid" id="loc_table" style="margin-top:8px;">
+          <thead><tr><th>Delete</th><th>Company</th><th>Location</th><th>Name</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <h2 style="font-size:16px;margin:12px 0 8px;">Bins</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="bin_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Location Code</label><input id="bin_loc" type="text" placeholder="MAIN"></div>
+          <div class="field"><label>Bin Code</label><input id="bin_code" type="text" placeholder="A-01"></div>
+          <div class="field"><label>Name</label><input id="bin_name" type="text" placeholder="Aisle 1 Bin 1"></div>
+        </div>
+        <button class="btn" id="bin_add">Add Bin</button>
+        <div class="row"><div class="field"><label>Filter Bins</label><input id="bin_filter" type="text" placeholder="Search..."></div></div>
+        <table class="grid" id="bin_table" style="margin-top:8px;">
+          <thead><tr><th>Delete</th><th>Company</th><th>Location</th><th>Bin</th><th>Name</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="gl" style="display:none;">
+        <h2>General Ledger</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="gl_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Date</label><input id="gl_date" type="date"></div>
+          <div class="field"><label>Reference</label><input id="gl_ref" type="text" placeholder="Ref"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Account Code</label><input id="gl_account" type="text" placeholder="1000"></div>
+          <div class="field"><label>Description</label><input id="gl_desc" type="text" placeholder="Memo"></div>
+          <div class="field"><label>Debit</label><input id="gl_debit" type="number" step="0.01"></div>
+          <div class="field"><label>Credit</label><input id="gl_credit" type="number" step="0.01"></div>
+        </div>
+        <button class="btn" id="gl_add_line">Add Line</button>
+        <div class="muted" id="gl_totals" style="margin-top:8px;">Totals — Debit: 0.00 Credit: 0.00</div>
+        <table class="grid" id="gl_draft_table" style="margin-top:8px;">
+          <thead><tr><th>Account</th><th>Description</th><th>Debit</th><th>Credit</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <button class="btn success" id="gl_post">Post Entry</button>
+        <table class="grid" id="gl_table" style="margin-top:8px;">
+          <thead><tr><th>GL Number</th><th>Company</th><th>Date</th><th>Lines</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="ap" style="display:none;">
+        <h2>AP — Vendors & Bills</h2>
+        <div class="tabs"><div class="tab active">Vendors</div><div class="tab">Bills</div></div>
+        <div class="row">
+          <div class="field"><label>Vendor Code</label><input id="ven_code" type="text" placeholder="V001"></div>
+          <div class="field"><label>Vendor Name</label><input id="ven_name" type="text" placeholder="Acme Supplies"></div>
+        </div>
+        <button class="btn" id="ven_add" onclick="addVendor()">Add Vendor</button>
+        <table class="grid" id="ven_table" style="margin-top:8px;">
+          <thead><tr><th>Code</th><th>Name</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="bill_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Bill Vendor Code</label><input id="bill_vendor" type="text" placeholder="V001"></div>
+          <div class="field"><label>Amount</label><input id="bill_amount" type="number" step="0.01"></div>
+          <div class="field"><label>Variance</label><input id="bill_variance" type="number" step="0.01" value="0"></div>
+          <div class="field"><label>PO Number (optional)</label><input id="bill_po" type="text" placeholder="PO-HKI-2025-00001"></div>
+          <div class="field"><label>Date</label><input id="bill_date" type="date"></div>
+        </div>
+        <button class="btn" id="bill_add" onclick="addBill()">Add Bill</button>
+        <div class="row"><div class="field"><label>Filter by PO#</label><input id="bill_filter_po" type="text" placeholder="PO-HKI-2025-00001"></div></div>
+        <table class="grid" id="bill_table" style="margin-top:8px;">
+          <thead><tr><th>Bill #</th><th>Company</th><th>Vendor</th><th>PO#</th><th>Amount</th><th>Variance</th><th>Net</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="ar" style="display:none;">
+        <h2>AR — Customers & Invoices</h2>
+        <div class="row">
+          <div class="field"><label>Customer Code</label><input id="cus_code" type="text" placeholder="C001"></div>
+          <div class="field"><label>Customer Name</label><input id="cus_name" type="text" placeholder="Acme Retail"></div>
+        </div>
+        <button class="btn" id="cus_add" onclick="addCustomer()">Add Customer</button>
+        <table class="grid" id="cus_table" style="margin-top:8px;">
+          <thead><tr><th>Code</th><th>Name</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="inv_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Invoice Customer Code</label><input id="inv_customer" type="text" placeholder="C001"></div>
+          <div class="field"><label>Amount</label><input id="inv_amount" type="number" step="0.01"></div>
+          <div class="field"><label>Discount</label><input id="inv_discount" type="number" step="0.01" value="0"></div>
+          <div class="field"><label>Freight</label><input id="inv_freight" type="number" step="0.01" value="0"></div>
+          <div class="field"><label>Date</label><input id="inv_date" type="date"></div>
+        </div>
+        <button class="btn" id="inv_add" onclick="addInvoice()">Add Invoice</button>
+        <table class="grid" id="inv_table" style="margin-top:8px;">
+          <thead><tr><th>Invoice #</th><th>Company</th><th>Customer</th><th>Amount</th><th>Discount</th><th>Freight</th><th>Net</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="report-sales" style="display:none;">
+        <h2>Sales Report</h2>
+        <div class="muted">Report → Sales</div>
+      </div>
+
+      <div class="panel page" id="report-purchase" style="display:none;">
+        <h2>Purchase Report</h2>
+        <div class="muted">Report → Purchase</div>
+      </div>
+
+      <div class="panel page" id="report-sales-customer" style="display:none;">
+        <h2>Sales Report</h2>
+        <div class="muted">Report → Sales → Sales by Customer</div>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="rep_sales_company" type="text" placeholder="ACME"></div>
+          <div class="field"><label>Date From</label><input id="rep_sales_from" type="date"></div>
+          <div class="field"><label>Date To</label><input id="rep_sales_to" type="date"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="rep_sales_cust_refresh">Refresh</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn secondary" id="rep_sales_cust_export">Export to Excel</button></div>
+        </div>
+        <div class="muted" id="rep_sales_cust_totals"></div>
+        <table class="grid" id="rep_sales_by_customer_table" style="margin-top:8px;">
+          <thead><tr><th>Customer</th><th>Orders</th><th>Qty</th><th>Amount</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="report-sales-item" style="display:none;">
+        <h2>Sales Report</h2>
+        <div class="muted">Report → Sales → Sales by Item</div>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="rep_sales_company" type="text" placeholder="ACME"></div>
+          <div class="field"><label>Date From</label><input id="rep_sales_from" type="date"></div>
+          <div class="field"><label>Date To</label><input id="rep_sales_to" type="date"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="rep_sales_item_refresh">Refresh</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn secondary" id="rep_sales_item_export">Export to Excel</button></div>
+        </div>
+        <div class="muted" id="rep_sales_item_totals"></div>
+        <table class="grid" id="rep_sales_by_item_table" style="margin-top:8px;">
+          <thead><tr><th>SKU</th><th>Orders</th><th>Qty</th><th>Amount</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="report-purchase-vendor" style="display:none;">
+        <h2>Purchase Report</h2>
+        <div class="muted">Report → Purchase → Purchase by Vendor</div>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="rep_pur_company" type="text" placeholder="ACME"></div>
+          <div class="field"><label>Date From</label><input id="rep_pur_from" type="date"></div>
+          <div class="field"><label>Date To</label><input id="rep_pur_to" type="date"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="rep_pur_vendor_refresh">Refresh</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn secondary" id="rep_pur_vendor_export">Export to Excel</button></div>
+        </div>
+        <div class="muted" id="rep_pur_vendor_totals"></div>
+        <table class="grid" id="rep_pur_by_vendor_table" style="margin-top:8px;">
+          <thead><tr><th>Vendor</th><th>Orders</th><th>Qty</th><th>Amount</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="report-purchase-item" style="display:none;">
+        <h2>Purchase Report</h2>
+        <div class="muted">Report → Purchase → Purchase by Item</div>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="rep_pur_company" type="text" placeholder="ACME"></div>
+          <div class="field"><label>Date From</label><input id="rep_pur_from" type="date"></div>
+          <div class="field"><label>Date To</label><input id="rep_pur_to" type="date"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="rep_pur_item_refresh">Refresh</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn secondary" id="rep_pur_item_export">Export to Excel</button></div>
+        </div>
+        <div class="muted" id="rep_pur_item_totals"></div>
+        <table class="grid" id="rep_pur_by_item_table" style="margin-top:8px;">
+          <thead><tr><th>SKU</th><th>Orders</th><th>Qty</th><th>Amount</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="report-finance" style="display:none;">
+        <h2>Finance Report</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="rep_fin_company" type="text" placeholder="ACME"></div>
+          <div class="field"><label>Date From</label><input id="rep_fin_from" type="date"></div>
+          <div class="field"><label>Date To</label><input id="rep_fin_to" type="date"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="rep_fin_refresh">Refresh</button></div>
+          <div class="field"><label>&nbsp;</label><button class="btn secondary" id="rep_fin_export">Export to Excel</button></div>
+        </div>
+        <div class="muted" id="rep_fin_totals"></div>
+        <table class="grid" id="rep_fin_table" style="margin-top:8px;">
+          <thead><tr><th>GL#</th><th>Company</th><th>Date</th><th>Status</th><th>Lines</th><th>Total Debit</th><th>Total Credit</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="ai" style="display:none;">
+        <h2>AI Assistant</h2>
+        <div class="row">
+          <div class="field" style="flex:1;">
+            <label>Command</label>
+            <input id="ai_cmd" type="text" placeholder="e.g. Create SO for CUST1 with ITEM1 qty 3">
+          </div>
+        </div>
+        <button class="btn" id="ai_run">Run</button>
+        <div class="panel" style="margin-top:8px;">
+          <h2 style="font-size:16px;margin:0 0 8px;">Activity Log</h2>
+          <table class="grid" id="ai_table">
+            <thead><tr><th>Time</th><th>Action</th><th>Output</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel page" id="hr" style="display:none;">
+        <h2>HR</h2>
+        <div class="row">
+          <div class="field"><label>Employee ID</label><input id="emp_id" type="text" placeholder="E001"></div>
+          <div class="field"><label>Name</label><input id="emp_name" type="text" placeholder="Jane Doe"></div>
+          <div class="field"><label>Role</label><input id="emp_role" type="text" placeholder="Sales Clerk"></div>
+        </div>
+        <button class="btn" id="emp_add">Add Employee</button>
+        <table class="grid" id="emp_table" style="margin-top:8px;">
+          <thead><tr><th>ID</th><th>Name</th><th>Role</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel page" id="admin" style="display:none;">
+        <h2>System Admin</h2>
+        <div class="muted">Prototype admin for role assignment and basic settings (future: metadata forms/workflows UI).</div>
+        <div class="row">
+          <div class="field"><label>Setting Key</label><input id="adm_key" type="text" placeholder="feature.flag"></div>
+          <div class="field"><label>Setting Value</label><input id="adm_val" type="text" placeholder="on"></div>
+        </div>
+        <button class="btn" onclick="alert('Saved (prototype)')">Save Setting</button>
+        <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;">
+        <h2 style="font-size:16px;margin:0 0 8px;">Periods</h2>
+        <div class="row">
+          <div class="field"><label>Company Code</label><input id="per_company" type="text" placeholder="HKI"></div>
+          <div class="field"><label>Date</label><input id="per_date" type="date"></div>
+          <div class="field"><label>Status</label><select id="per_status"><option>open</option><option>closed</option></select></div>
+        </div>
+        <button class="btn" id="per_set">Set Period Status</button>
+        <table class="grid" id="per_table" style="margin-top:8px;">
+          <thead><tr><th>Company</th><th>Period</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>

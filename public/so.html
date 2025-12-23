@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><title>Sales Orders</title>
+  <link href="/erp/ns-main.css" rel="stylesheet">
+  <style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}input,button,textarea{padding:8px;border:1px solid #e5e7eb;border-radius:6px}button{background:#1558b0;color:#fff;border:none} .row{display:flex;gap:8px;margin:8px 0} table{border-collapse:collapse;width:100%}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#f3f4f6}</style>
+</head>
+<body>
+  
+  <h2>Create SO</h2>
+  <div class="row">
+    <input id="company" placeholder="company_code" value="ACME">
+    <input id="customer" placeholder="customer" value="CUST1">
+  </div>
+  <div>
+    Lines (sku,qty,price per line):
+    <textarea id="lines" rows="4" cols="60">ITEM1,3,20
+ITEM2,2,15</textarea>
+  </div>
+  <div class="row"><button id="create">Create SO</button><span id="so_out"></span></div>
+
+  <h2>SO List</h2>
+  <div class="row"><button id="list">Refresh List</button></div>
+  <table>
+    <thead><tr><th>SO#</th><th>Customer</th><th>Status</th><th>Date</th><th>Lines</th></tr></thead>
+    <tbody id="so_rows"></tbody>
+  </table>
+
+  <h2>Ship SO</h2>
+  <div class="row">
+    <input id="so_number" placeholder="so_number">
+    <input id="ship_loc" placeholder="location" value="MAIN">
+    <button id="ship">Ship</button>
+  </div>
+  <div id="ship_out"></div>
+
+  <script>
+    const APIS=['http://127.0.0.1:8788',''];
+    async function api(path,opts){for(const base of APIS){try{const r=await fetch((base||'')+path,opts);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){if(base===APIS[APIS.length-1])throw e}}return []}
+    function headers(){const t=localStorage.getItem('token');const h={'Content-Type':'application/json'};if(t)h['Authorization']='Bearer '+t;return h}
+    function parseLines(text){return text.split(/\r?\n/).filter(Boolean).map(l=>{const [sku,qty,price]=l.split(',').map(s=>s.trim());return {sku,qty:Number(qty||0),price:Number(price||0)}})}
+    async function create(){const body={company_code:val('company'),customer:val('customer'),lines:parseLines(val('lines'))};const j=await api('/api/sales/orders',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(j.error)alert(j.error);else{document.getElementById('so_out').textContent='SO: '+j.so_number;await list()}}
+    async function ship(){const so_number=val('so_number');const body={company_code:val('company'),so_number,location:val('ship_loc')};const j=await api('/api/sales/ship',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(j.error)alert(j.error);else{document.getElementById('ship_out').textContent='Shipped '+(j.so_number||so_number)+', GL '+(j.gl_number||'');await list()}}
+    async function list(){const arr=await api('/api/sales/orders');const tb=document.getElementById('so_rows');tb.innerHTML='';arr.forEach(o=>{const lines=(o.lines||[]).length;const tr=document.createElement('tr');tr.innerHTML=`<td><a href=\"#\" data-so=\"${o.so_number||''}\">${o.so_number||''}</a></td><td>${o.customer||''}</td><td>${o.status||''}</td><td>${o.date||''}</td><td>${lines}</td>`;tb.appendChild(tr)});Array.from(tb.querySelectorAll('a[data-so]')).forEach(a=>a.onclick=function(){document.getElementById('so_number').value=this.getAttribute('data-so')})}
+    function val(id){return document.getElementById(id).value}
+    document.getElementById('create').onclick=create
+    document.getElementById('ship').onclick=ship
+    document.getElementById('list').onclick=list
+    list()
+  </script>
+</body>
+</html>

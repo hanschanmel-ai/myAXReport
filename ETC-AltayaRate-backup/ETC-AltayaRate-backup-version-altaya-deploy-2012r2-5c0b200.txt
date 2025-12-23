@@ -1,0 +1,1 @@
+Subject: feat: unify pickup rate name to ETC Shipping Fee; disable webhooks; improve pickup matching and sanitized index freshness; add admin pickup tools and locking; keep manual fee logic unchanged

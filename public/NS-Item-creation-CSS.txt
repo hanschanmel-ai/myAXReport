@@ -1,0 +1,71 @@
+/**********************************************
+ * NETSUITE CLASSIC TAB MENU (ITEM RECORD)
+ * Replica of UI shown in screenshot
+ **********************************************/
+
+/* TAB BAR WRAPPER */
+.ns-tabbar {
+    display: flex;
+    border-bottom: 1px solid #c8c8c8;
+    background: #e6e9ee; /* light grey */
+    padding-left: 5px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow-x: auto;     /* allows long tab lists */
+}
+
+/* INDIVIDUAL TABS */
+.ns-tab {
+    padding: 8px 14px;
+    margin-right: 2px;
+    background: #f3f4f7;
+    border: 1px solid #c8c8c8;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    font-size: 13px;
+    color: #1d2d48;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: background 0.15s ease-in-out;
+}
+
+/* HOVER */
+.ns-tab:hover {
+    background: #ffffff;
+}
+
+/* ACTIVE TAB (selected) */
+.ns-tab.active {
+    background: #4f6aa3;        /* classic NetSuite dark blue */
+    color: white;
+    font-weight: 600;
+    border-color: #3c568c;
+}
+
+/* ACTIVE TAB – subtle shadow like NetSuite */
+.ns-tab.active {
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.15);
+}
+
+/* FOCUS (keyboard navigation) */
+.ns-tab:focus {
+    outline: 2px solid #4f6aa3;
+}
+
+/* TAB CONTENT AREA */
+.ns-tab-content {
+    border: 1px solid #c8c8c8;
+    border-top: none;
+    padding: 20px;
+    background: white;
+    font-size: 14px;
+}
+
+/* FOR MOBILE – scrollable tabs look clean */
+.ns-tabbar::-webkit-scrollbar {
+    height: 6px;
+}
+.ns-tabbar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}

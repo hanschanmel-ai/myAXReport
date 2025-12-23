@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><title>AI ERP Login</title>
+  <link href="/erp/ns-main.css" rel="stylesheet">
+  <style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}input,button{padding:8px;border:1px solid #e5e7eb;border-radius:6px}button{background:#1558b0;color:#fff;border:none;margin-top:8px} .row{display:flex;gap:8px;margin:8px 0}</style>
+</head>
+<body>
+  
+  <h2>Login</h2>
+  <div class="row"><input id="email" placeholder="email" value="admin@example.com"><input id="password" type="password" placeholder="password" value="admin123"></div>
+  <button onclick="login()">Login</button>
+  <div id="out" style="margin-top:8px;color:#1558b0"></div>
+  <script>
+    const APIS=['http://127.0.0.1:8788',''];
+    async function api(path,opts){for(const base of APIS){try{const r=await fetch((base||'')+path,opts);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){if(base===APIS[APIS.length-1])throw e}}
+      return {error:'Network'}}
+    function login(){
+      const email=document.getElementById('email').value;const password=document.getElementById('password').value;
+      api('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})})
+        .then(out=>{if(out.error){document.getElementById('out').textContent=out.error;return}
+          localStorage.setItem('token',out.token);document.getElementById('out').textContent='Logged in';})
+        .catch(()=>document.getElementById('out').textContent='Network error')
+    }
+  </script>
+</body>
+</html>

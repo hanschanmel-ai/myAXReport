@@ -1,0 +1,38 @@
+{
+  "form": {
+    "name": "Sales Order Default",
+    "entity_type": "sales_order",
+    "version": 1,
+    "layout": {
+      "sections": [
+        { "title": "Header", "fields": ["order_date", "customer", "currency"] },
+        { "title": "Items", "sublist": "lines" }
+      ],
+      "tabs": [
+        { "title": "Billing", "fields": ["payment_terms", "bill_to"] }
+      ]
+    },
+    "fields": [
+      { "key": "order_date", "data_type": "date", "validation": { "required": true } },
+      { "key": "customer", "data_type": "string", "validation": { "required": true } },
+      { "key": "currency", "data_type": "string", "validation": { "in": ["HKD", "USD"] }, "defaulting": { "company_currency": true } },
+      { "key": "payment_terms", "data_type": "string", "validation": { "required": false } },
+      { "key": "bill_to", "data_type": "string", "validation": { "required": false } }
+    ],
+    "lines": [
+      { "key": "item_id", "data_type": "string", "validation": { "required": true } },
+      { "key": "uom", "data_type": "string", "validation": { "required": true } },
+      { "key": "qty", "data_type": "number", "validation": { "min": 1 } },
+      { "key": "price", "data_type": "number", "validation": { "min": 0 } }
+    ],
+    "visibility": { "roles": ["Sales Clerk", "Sales Manager"], "companies": ["<all>"] },
+    "workflow": {
+      "states": ["draft", "submitted", "approved", "fulfilled", "invoiced", "closed"],
+      "transitions": [
+        { "from": "draft", "to": "submitted" },
+        { "from": "submitted", "to": "approved", "guard": { "role_in": ["Sales Manager"] } }
+      ]
+    }
+  }
+}
+

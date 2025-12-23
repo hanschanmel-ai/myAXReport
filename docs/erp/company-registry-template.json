@@ -1,0 +1,21 @@
+{
+  "tenant_id": "<tenant-uuid>",
+  "companies": [
+    {
+      "company_code": "<user-defined>",
+      "legal_name": "<user-defined>",
+      "currency_code": "<user-selected>",
+      "timezone": "<auto-by-country-or-user-selected>",
+      "languages": ["en"],
+      "fiscal_calendar": { "strategy": "user-defined", "start_month": 1, "periods": 12 },
+      "tax_regime": { "strategy": "user-defined", "vat": true, "rates": [] },
+      "number_series": {
+        "SO": { "prefix": "SO-<code>-", "reset": "year", "width": 5 },
+        "PO": { "prefix": "PO-<code>-", "reset": "year", "width": 5 },
+        "INV": { "prefix": "INV-<code>-", "reset": "year", "width": 6 }
+      },
+      "data_residency": "<region>"
+    }
+  ]
+}
+

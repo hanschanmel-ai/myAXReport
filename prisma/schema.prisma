@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Company {
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  name      String
+  currency  String
+  tz        String
+  createdAt DateTime @default(now())
+}
+model Account {
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  name      String
+  type      String
+  summary   Boolean @default(false)
+}
+model Item {
+  id   Int    @id @default(autoincrement())
+  sku  String @unique
+  name String
+  uom  String
+}
+model ItemDetail {
+  id         Int    @id @default(autoincrement())
+  sku        String @unique
+  display    String
+  type       String
+  uom        String
+  asset_acc  String
+  cogs_acc   String
+  income_acc String
+}
+model InventoryBalance {
+  id          Int    @id @default(autoincrement())
+  companyCode String
+  location    String
+  itemSku     String
+  qtyOnHand   Float  @default(0)
+  avgCost     Float  @default(0)
+}
+model GlEntry {
+  id          Int      @id @default(autoincrement())
+  glNumber    String   @unique
+  companyCode String
+  date        DateTime
+  reference   String?
+  status      String
+  lines       GlLine[]
+}
+model GlLine {
+  id        Int    @id @default(autoincrement())
+  entryId   Int
+  account   String
+  debit     Float  @default(0)
+  credit    Float  @default(0)
+  desc      String?
+  entry     GlEntry @relation(fields: [entryId], references: [id])
+}
+model Vendor {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String
+}
+model Customer {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String
+}
+model PurchaseOrder {
+  id          Int      @id @default(autoincrement())
+  poNumber    String   @unique
+  companyCode String
+  vendorCode  String
+  status      String
+  date        DateTime @default(now())
+  lines       PurchaseOrderLine[]
+}
+model PurchaseOrderLine {
+  id      Int    @id @default(autoincrement())
+  poId    Int
+  sku     String
+  qty     Float
+  price   Float
+  po      PurchaseOrder @relation(fields: [poId], references: [id])
+}
+model SalesOrder {
+  id          Int      @id @default(autoincrement())
+  soNumber    String   @unique
+  companyCode String
+  customerCode String
+  status      String
+  date        DateTime @default(now())
+  lines       SalesOrderLine[]
+}
+model SalesOrderLine {
+  id      Int    @id @default(autoincrement())
+  soId    Int
+  sku     String
+  qty     Float
+  so      SalesOrder @relation(fields: [soId], references: [id])
+}
+model Period {
+  id          Int    @id @default(autoincrement())
+  companyCode String
+  key         String
+  status      String
+}
+model Location {
+  id          Int    @id @default(autoincrement())
+  companyCode String
+  code        String
+  name        String
+}
+model Bin {
+  id          Int    @id @default(autoincrement())
+  companyCode String
+  locationCode String
+  code        String
+  name        String
+}
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  roles        UserRole[]
+}
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users UserRole[]
+}
+model UserRole {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+  @@id([userId, roleId])
+}

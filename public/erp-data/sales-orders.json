@@ -1,0 +1,65 @@
+{
+  "nextId": 4,
+  "rows": [
+    {
+      "id": 1,
+      "so_number": "SO-Wine Cellar Ltd-2025-00001",
+      "company_code": "Wine Cellar Ltd",
+      "customer": "CUST1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 3,
+          "price": 20
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 2,
+          "price": 15
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    },
+    {
+      "id": 2,
+      "so_number": "SO-Wine Cellar Ltd-2025-00002",
+      "company_code": "Wine Cellar Ltd",
+      "customer": "CUST1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 3,
+          "price": 20
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 2,
+          "price": 15
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    },
+    {
+      "id": 3,
+      "so_number": "SO-ACME-2025-00001",
+      "company_code": "ACME",
+      "customer": "CUST1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 3,
+          "price": 20
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 2,
+          "price": 15
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    }
+  ]
+}

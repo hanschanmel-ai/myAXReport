@@ -1,0 +1,2 @@
+const BASE=typeof window!=='undefined'?(localStorage.getItem('api_base')||'http://localhost:8787'):'http://localhost:8787'
+export async function api(path,method='GET',body){const token=typeof window!=='undefined'?localStorage.getItem('token')||'':'';const res=await fetch(BASE+path,{method,headers:{'Content-Type':'application/json',...(token?{'Authorization':'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});const out=await res.json();if(!res.ok)throw new Error(out.error||'Error');return out}

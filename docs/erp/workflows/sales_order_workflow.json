@@ -1,0 +1,16 @@
+{
+  "entity_type": "sales_order",
+  "states": ["draft", "submitted", "approved", "fulfilled", "invoiced", "closed"],
+  "transitions": [
+    { "from": "draft", "to": "submitted" },
+    { "from": "submitted", "to": "approved", "guard": { "role_in": ["Sales Manager"], "amount_lt": 20000 } },
+    { "from": "approved", "to": "fulfilled" },
+    { "from": "fulfilled", "to": "invoiced" },
+    { "from": "invoiced", "to": "closed" }
+  ],
+  "notifications": [
+    { "on": "submitted", "toRole": "Sales Manager", "channel": "email" }
+  ],
+  "version": 1
+}
+

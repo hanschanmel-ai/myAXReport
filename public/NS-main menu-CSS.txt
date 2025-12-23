@@ -1,0 +1,320 @@
+/**************************************
+ *  NETSUITE MAIN HEADER MENU (REPLICA)
+ **************************************/
+
+:root {
+    --ns-blue: #2E6AB3;
+    --ns-blue-dark: #254f86;
+    --ns-gray: #f5f5f5;
+    --ns-border: #dcdcdc;
+    --ns-text: #333;
+    --ns-hover-bg: #e9eef7;
+    --ns-highlight: #ffce00;
+    --ns-danger: #d9534f;
+}
+
+/* ===========================
+   GLOBAL RESET + TYPOGRAPHY
+   =========================== */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background: #fff;
+    color: var(--ns-text);
+}
+
+a { 
+    color: var(--ns-blue); 
+    text-decoration: none; 
+}
+a:hover { text-decoration: underline; }
+
+label {
+    display: inline-block;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+/* ===========================
+   TOP HEADER BAR
+   =========================== */
+.ns-header {
+    background: var(--ns-blue);
+    color: #fff;
+    padding: 0 20px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ns-header .logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.ns-header .user-menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.ns-header .user-menu .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* ===========================
+   MAIN MENU BAR
+   =========================== */
+
+.ns-main-menu {
+    background: var(--ns-blue-dark);
+    height: 38px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.ns-main-menu .menu-item {
+    position: relative;
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.ns-main-menu .menu-item:hover {
+    background: var(--ns-blue);
+}
+
+.ns-main-menu .menu-item.active {
+    background: var(--ns-highlight);
+    color: #000;
+}
+
+/* ===========================
+   SUB-MENU (DROP-DOWN)
+   =========================== */
+
+.ns-sub-menu {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    background: #fff;
+    min-width: 230px;
+    border: 1px solid var(--ns-border);
+    display: none;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.ns-main-menu .menu-item:hover .ns-sub-menu {
+    display: flex;
+}
+
+.ns-sub-menu .sub-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--ns-border);
+    color: var(--ns-text);
+    font-size: 13px;
+}
+
+.ns-sub-menu .sub-item:hover {
+    background: var(--ns-hover-bg);
+}
+
+/* ===========================
+   FORM LAYOUTS (Item / Account / SO / PO / JE)
+   =========================== */
+
+.ns-form {
+    background: #fff;
+    border: 1px solid var(--ns-border);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 4px;
+}
+
+.ns-form .form-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.ns-form .form-col-6 {
+    width: 50%;
+    padding-right: 20px;
+}
+
+.ns-form input[type=text],
+.ns-form input[type=number],
+.ns-form input[type=date],
+.ns-form select,
+.ns-form textarea {
+    width: 100%;
+    border: 1px solid var(--ns-border);
+    padding: 7px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.ns-form input:focus,
+.ns-form select:focus,
+.ns-form textarea:focus {
+    border-color: var(--ns-blue);
+    outline: none;
+}
+
+/* Mandatory Field Highlight */
+.ns-mandatory label:after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}
+
+/* ===========================
+   RECORD HEADER
+   (Item Master, Account, SO, PO, JE)
+   =========================== */
+
+.ns-record-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ns-border);
+    margin-bottom: 20px;
+}
+
+.ns-record-header h1 {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+
+.ns-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--ns-border);
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ns-btn-primary {
+    background: var(--ns-blue);
+    color: #fff;
+    border-color: var(--ns-blue-dark);
+}
+
+.ns-btn-primary:hover {
+    background: var(--ns-blue-dark);
+}
+
+.ns-btn-danger {
+    background: var(--ns-danger);
+    border-color: #b74542;
+    color: #fff;
+}
+
+.ns-btn-danger:hover {
+    background: #b74542;
+}
+
+/* ===========================
+   SUBLIST TABLE (e.g., Item Lines, SO Lines)
+   =========================== */
+
+.ns-sublist {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.ns-sublist th {
+    background: var(--ns-gray);
+    border: 1px solid var(--ns-border);
+    padding: 8px;
+    font-weight: 600;
+}
+
+.ns-sublist td {
+    border: 1px solid var(--ns-border);
+    padding: 7px;
+}
+
+.ns-sublist tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Hover effect for editable rows */
+.ns-sublist tr:hover {
+    background: #f1f5ff;
+}
+
+/* ===========================
+   SPECIFIC UI SECTIONS
+   =========================== */
+
+/* ITEM CREATION */
+.item-section-header {
+    background: #f0f7ff;
+    padding: 10px;
+    border-left: 4px solid var(--ns-blue);
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* ACCOUNT CREATION */
+.account-type-box {
+    background: #fff8db;
+    padding: 10px;
+    border: 1px solid #ffe7a3;
+    margin-bottom: 15px;
+}
+
+/* SALES ORDER */
+.so-customer-info, 
+.po-vendor-info, 
+.je-header-info,
+.inv-transfer-info,
+.inv-adjust-info {
+    background: #f9f9f9;
+    border: 1px solid var(--ns-border);
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+/* JE Lines */
+.je-lines td input {
+    width: 100%;
+    padding: 6px;
+}
+
+/* Inventory Transfer / Adjustment */
+.inventory-warning {
+    background: #fff3f3;
+    border-left: 4px solid #c0392b;
+    padding: 10px;
+    color: #b30000;
+    margin-bottom: 15px;
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+
+.ns-footer {
+    padding: 20px;
+    background: #fafafa;
+    border-top: 1px solid var(--ns-border);
+    text-align: center;
+    color: #777;
+}

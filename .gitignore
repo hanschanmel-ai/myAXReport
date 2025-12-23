@@ -27,3 +27,10 @@ logs/
 # Misc
 .cache/
 tmp/
+
+src/shopifyTokens.json
+src/selectedAddress.json
+public/.vercel/
+admin.tmp
+cloudflared/
+

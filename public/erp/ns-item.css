@@ -1,0 +1,9 @@
+.ns-item-form .row{display:flex;gap:12px;margin-bottom:8px}
+.ns-item-form .field{flex:1}
+.ns-item-form .field label{display:block;font-size:12px;color:#4b5563;margin-bottom:4px}
+.ns-item-form .field input,.ns-item-form .field select{width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:6px;background:#fff}
+.ns-item-form .tabs{display:flex;gap:8px;margin-bottom:8px}
+.ns-item-form .tab{padding:8px 12px;border:1px solid #e5e7eb;border-radius:6px;background:#f9fafb;cursor:pointer}
+.ns-item-form .tab.active{background:#ffffff;border-color:#1a73e8;color:#1a73e8}
+.ns-item-form .actions{margin-top:8px}
+.ns-item-form .actions .ns-btn{margin-right:8px}

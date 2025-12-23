@@ -1,0 +1,34 @@
+{
+  "ACME": {
+    "PO": {
+      "prefix": "PO-ACME-",
+      "current": 4,
+      "width": 5,
+      "reset_policy": "year",
+      "last_reset_at": "2025-12-15"
+    },
+    "GL": {
+      "prefix": "GL-ACME-",
+      "current": 3,
+      "width": 5,
+      "reset_policy": "year",
+      "last_reset_at": "2025-12-15"
+    },
+    "SO": {
+      "prefix": "SO-ACME-",
+      "current": 2,
+      "width": 5,
+      "reset_policy": "year",
+      "last_reset_at": "2025-12-15"
+    }
+  },
+  "Wine Cellar Ltd": {
+    "SO": {
+      "prefix": "SO-Wine Cellar Ltd-",
+      "current": 3,
+      "width": 5,
+      "reset_policy": "year",
+      "last_reset_at": "2025-12-15"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ERP Prototype - Sales Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 20px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 20px; margin-bottom: 8px; }
+    .section { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .row { display: flex; gap: 12px; margin-bottom: 8px; }
+    .field { flex: 1; }
+    label { display: block; font-size: 12px; color: #374151; margin-bottom: 4px; }
+    input, select { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #e5e7eb; padding: 6px; text-align: left; }
+    .btn { background: #2563eb; color: #fff; border: none; border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+    .btn.secondary { background: #6b7280; }
+    .status { font-size: 12px; color: #047857; margin-bottom: 12px; }
+    .error { color: #dc2626; font-size: 12px; }
+    pre { background: #f9fafb; padding: 12px; border-radius: 8px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ERP Prototype — Sales Order</h1>
+    <div class="status" id="status"></div>
+    <div class="section" id="header"></div>
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="font-size:16px;margin:0;">Items</h2>
+        <button class="btn" id="addLine">Add Line</button>
+      </div>
+      <table id="linesTable">
+        <thead>
+          <tr><th>Item</th><th>UOM</th><th>Qty</th><th>Price</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="section" id="actions">
+      <button class="btn" id="submit">Submit (Draft → Submitted)</button>
+      <button class="btn secondary" id="preview">Preview Payload</button>
+      <div id="errors" class="error"></div>
+      <h3 style="font-size:14px;">Payload</h3>
+      <pre id="payload"></pre>
+    </div>
+  </div>
+  <script src="./erp-prototype.js"></script>
+</body>
+</html>
+

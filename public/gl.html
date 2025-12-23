@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><title>General Ledger</title>
+  <link href="/erp/ns-main.css" rel="stylesheet">
+  <style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#f3f4f6}input,button,textarea{padding:8px;border:1px solid #e5e7eb;border-radius:6px}button{background:#1558b0;color:#fff;border:none} .row{display:flex;gap:8px;margin:8px 0}</style>
+</head>
+<body>
+  
+  <h2>GL Entries</h2>
+  <div class="row"><input id="company" placeholder="company_code" value="ACME"><button id="refresh">Refresh</button></div>
+  <table>
+    <thead><tr><th>GL#</th><th>Company</th><th>Date</th><th>Status</th><th>Lines</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <h2>Post GL</h2>
+  <div class="row"><input id="gl_company" placeholder="company_code" value="ACME"><input id="gl_ref" placeholder="reference" value="Manual"></div>
+  <div>
+    Lines as JSON array:
+    <textarea id="gl_lines" rows="5" cols="80">[{"account_code":"1200","debit":100,"credit":0,"desc":"Asset"},{"account_code":"3000","debit":0,"credit":100,"desc":"Equity"}]</textarea>
+  </div>
+  <div class="row"><button id="post">Post</button><span id="post_out"></span></div>
+
+  <script>
+    const APIS=['http://127.0.0.1:8788',''];
+    async function api(path,opts){for(const base of APIS){try{const r=await fetch((base||'')+path,opts);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){if(base===APIS[APIS.length-1])throw e}}return []}
+    function headers(){const t=localStorage.getItem('token');const h={'Content-Type':'application/json'};if(t)h['Authorization']='Bearer '+t;return h}
+    function render(rows){const tb=document.getElementById('rows');tb.innerHTML='';rows.forEach(r=>{const tr=document.createElement('tr');const lines=(r.lines||[]).map(l=>`${l.account_code}:${l.debit}/${l.credit}`).join('; ');tr.innerHTML=`<td>${r.gl_number||''}</td><td>${r.company_code||''}</td><td>${r.date||''}</td><td>${r.status||''}</td><td>${lines}</td>`;tb.appendChild(tr)})}
+    async function load(){const company=document.getElementById('company').value;const url=company?('/api/gl/entries?company_code='+encodeURIComponent(company)):'/api/gl/entries';const j=await api(url);render(j)}
+    async function post(){let lines=[];try{lines=JSON.parse(document.getElementById('gl_lines').value)}catch(e){alert('Invalid JSON');return}const body={company_code:document.getElementById('gl_company').value,date:new Date().toISOString().slice(0,10),lines,reference:document.getElementById('gl_ref').value};const j=await api('/api/gl/post',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(j.error)alert(j.error);else{document.getElementById('post_out').textContent='Posted GL '+j.gl_number;load()}}
+    document.getElementById('refresh').onclick=load
+    document.getElementById('post').onclick=post
+    load()
+  </script>
+</body>
+</html>

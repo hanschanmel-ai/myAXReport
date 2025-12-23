@@ -1,0 +1,65 @@
+{
+  "nextId": 4,
+  "rows": [
+    {
+      "id": 1,
+      "po_number": "PO-ACME-2025-00001",
+      "company_code": "ACME",
+      "vendor": "VEND1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 10,
+          "price": 12
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 5,
+          "price": 8
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    },
+    {
+      "id": 2,
+      "po_number": "PO-ACME-2025-00002",
+      "company_code": "ACME",
+      "vendor": "VEND1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 10,
+          "price": 12
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 5,
+          "price": 8
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    },
+    {
+      "id": 3,
+      "po_number": "PO-ACME-2025-00003",
+      "company_code": "ACME",
+      "vendor": "VEND1",
+      "lines": [
+        {
+          "sku": "ITEM1",
+          "qty": 10,
+          "price": 12
+        },
+        {
+          "sku": "ITEM2",
+          "qty": 5,
+          "price": 8
+        }
+      ],
+      "status": "open",
+      "date": "2025-12-15"
+    }
+  ]
+}

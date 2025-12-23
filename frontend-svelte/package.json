@@ -1,0 +1,19 @@
+{
+  "name": "ai-erp-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "preview": "svelte-kit preview"
+  },
+  "dependencies": {
+    "@sveltejs/kit": "^2.49.2",
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^3.3.1",
+    "vite": "^6.3.0"
+  }
+}

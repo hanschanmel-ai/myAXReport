@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><title>Inventory</title>
+  <link href="/erp/ns-main.css" rel="stylesheet">
+  <style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#f3f4f6}input,select,button{padding:8px;border:1px solid #e5e7eb;border-radius:6px}button{background:#1558b0;color:#fff;border:none} .row{display:flex;gap:8px;margin:8px 0} .top{display:flex;gap:12px;margin-bottom:12px}</style>
+  </head>
+<body>
+  
+  <h2>Inventory Balances</h2>
+  <div class="row">
+    <button id="refresh">Refresh</button>
+    <button id="seed">Create sample item</button>
+  </div>
+  <table>
+    <thead><tr><th>Company</th><th>Location</th><th>SKU</th><th>On Hand</th><th>Avg Cost</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <h3>Movement</h3>
+  <div class="row">
+    <input id="mv_company" placeholder="company_code" value="ACME">
+    <input id="mv_location" placeholder="location" value="MAIN">
+    <input id="mv_bin" placeholder="bin_code">
+    <input id="mv_sku" placeholder="item_sku" value="ITEM1">
+    <input id="mv_qty" placeholder="qty" value="10">
+    <select id="mv_dir"><option value="in">in</option><option value="out">out</option></select>
+    <button id="mv_go">Apply</button>
+  </div>
+
+  <h3>Transfer</h3>
+  <div class="row">
+    <input id="tr_company" placeholder="company_code" value="ACME">
+    <input id="tr_from_loc" placeholder="from_location" value="MAIN">
+    <input id="tr_from_bin" placeholder="from_bin">
+    <input id="tr_to_loc" placeholder="to_location" value="SEC">
+    <input id="tr_to_bin" placeholder="to_bin">
+    <input id="tr_sku" placeholder="item_sku" value="ITEM1">
+    <input id="tr_qty" placeholder="qty" value="5">
+    <button id="tr_go">Transfer</button>
+  </div>
+
+  <h3>Adjustment</h3>
+  <div class="row">
+    <input id="ad_company" placeholder="company_code" value="ACME">
+    <input id="ad_location" placeholder="location" value="MAIN">
+    <input id="ad_bin" placeholder="bin_code">
+    <input id="ad_sku" placeholder="item_sku" value="ITEM1">
+    <input id="ad_qty" placeholder="qty (+/-)" value="-2">
+    <button id="ad_go">Adjust</button>
+  </div>
+
+  <script>
+    const APIS=['http://127.0.0.1:8788',''];
+    async function api(path,opts){for(const base of APIS){try{const r=await fetch((base||'')+path,opts);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){if(base===APIS[APIS.length-1])throw e}}return {error:'Network'}}
+    function headers(){const t=localStorage.getItem('token');const h={'Content-Type':'application/json'};if(t)h['Authorization']='Bearer '+t;return h}
+    function render(rows){const tb=document.getElementById('rows');tb.innerHTML='';rows.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.company_code||r.companyCode||''}</td><td>${r.location||''}</td><td>${r.item_sku||r.itemSku||''}</td><td>${Number(r.qty_on_hand||r.qtyOnHand||0).toFixed(2)}</td><td>${Number(r.avg_cost||0).toFixed(2)}</td>`;tb.appendChild(tr)})}
+    async function load(){const rows=await api('/api/inventory/balances');render(rows)}
+    async function seed(){await api('/api/items',{method:'POST',headers:headers(),body:JSON.stringify({sku:'ITEM1',name:'Item 1',uom:'EA'})});alert('Sample item created')}
+    async function movement(){const body={company_code:val('mv_company'),location:val('mv_location'),bin_code:val('mv_bin'),item_sku:val('mv_sku'),qty:Number(val('mv_qty')),direction:val('mv_dir')};const out=await api('/api/inventory/movements',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(out.error)alert(out.error);else{alert('OK');load()}}
+    async function transfer(){const body={company_code:val('tr_company'),from_location:val('tr_from_loc'),from_bin:val('tr_from_bin'),to_location:val('tr_to_loc'),to_bin:val('tr_to_bin'),item_sku:val('tr_sku'),qty:Number(val('tr_qty'))};const out=await api('/api/inventory/transfer',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(out.error)alert(out.error);else{alert('OK');load()}}
+    async function adjust(){const body={company_code:val('ad_company'),location:val('ad_location'),bin_code:val('ad_bin'),item_sku:val('ad_sku'),qty:Number(val('ad_qty'))};const out=await api('/api/inventory/adjustment',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(out.error)alert(out.error);else{alert('OK');load()}}
+    function val(id){return document.getElementById(id).value}
+    document.getElementById('refresh').onclick=load
+    document.getElementById('seed').onclick=seed
+    document.getElementById('mv_go').onclick=movement
+    document.getElementById('tr_go').onclick=transfer
+    document.getElementById('ad_go').onclick=adjust
+    load()
+  </script>
+</body>
+</html>

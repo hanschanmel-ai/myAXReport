@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><title>AP Bills</title>
+  <link href="/erp/ns-main.css" rel="stylesheet">
+  <style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#f3f4f6}input,button{padding:8px;border:1px solid #e5e7eb;border-radius:6px}button{background:#1558b0;color:#fff;border:none}</style>
+</head>
+<body>
+  
+  <h2>AP Bills</h2>
+  <div class="row">
+    <input id="company" placeholder="company_code" value="ACME">
+    <input id="vendor" placeholder="vendor" value="VEND1">
+    <input id="amount" placeholder="amount" value="100">
+    <button id="create">Create Bill</button>
+    <button id="refresh">Refresh</button>
+  </div>
+  <table>
+    <thead><tr><th>Bill #</th><th>Company</th><th>Vendor</th><th>Amount</th><th>Status</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <script>
+    const APIS=['http://127.0.0.1:8788',''];
+    async function api(path,opts){for(const base of APIS){try{const r=await fetch((base||'')+path,opts);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){if(base===APIS[APIS.length-1])throw e}}return []}
+    function headers(){const t=localStorage.getItem('token');const h={'Content-Type':'application/json'};if(t)h['Authorization']='Bearer '+t;return h}
+    function render(rows){const tb=document.getElementById('rows');tb.innerHTML='';rows.forEach(b=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${b.bill_number}</td><td>${b.company_code}</td><td>${b.vendor}</td><td>${Number(b.amount||0).toFixed(2)}</td><td>${b.status||''}</td>`;tb.appendChild(tr)})}
+    async function load(){const rows=await api('/api/ap/bills');render(rows)}
+    async function create(){const body={company_code:val('company'),vendor:val('vendor'),amount:Number(val('amount'))};const out=await api('/api/ap/bills',{method:'POST',headers:headers(),body:JSON.stringify(body)});if(out.error)alert(out.error);else{alert('Created '+out.bill_number);load()}}
+    function val(id){return document.getElementById(id).value}
+    document.getElementById('refresh').onclick=load
+    document.getElementById('create').onclick=create
+    load()
+  </script>
+</body>
+</html>

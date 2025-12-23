@@ -393,10 +393,13 @@ app.post("/carrier/rates", (req, res) => {
     res.setHeader('Cache-Control','no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma','no-cache');
     res.setHeader('Expires','0');
-    const fb = 250;
+    const fbEnabled = !!(cfg && cfg.fallback_enabled);
+    const fbConfigured = (cfg && typeof cfg.fallback_fee_hkd === 'number' && !Number.isNaN(cfg.fallback_fee_hkd)) ? cfg.fallback_fee_hkd : undefined;
+    const baseDefault = (cfg && typeof cfg.default_fee_hkd === 'number' && !Number.isNaN(cfg.default_fee_hkd)) ? cfg.default_fee_hkd : 0;
+    const fb = fbEnabled ? (typeof fbConfigured === 'number' ? fbConfigured : baseDefault) : baseDefault;
     const cents = Math.round(fb * 100);
     response.rates.push({ service_name: "ETC Shipping Fee", service_code: "ALTAYA_SHIPPING_DEFAULT", total_price: String(cents), currency: "HKD", min_delivery_date: minDate, max_delivery_date: maxDate });
-    writeETC(etcPath, { ts: Date.now(), event: "default-fee", address, regionKey, districtKey, compositeKey, matchedKey, fee_hkd: fb });
+    writeETC(etcPath, { ts: Date.now(), event: fbEnabled ? "fallback-fee" : "default-fee", address, regionKey, districtKey, compositeKey, matchedKey, fee_hkd: fb });
     return res.json(response);
   }
   let op = (selectedArea && typeof selectedArea.threshold_op === "string" && (selectedArea.threshold_op === "lt" || selectedArea.threshold_op === "ge")) ? selectedArea.threshold_op : "lt";
@@ -493,7 +496,10 @@ app.post("/proxy/carrier/rates", (req, res) => {
     res.setHeader('Cache-Control','no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma','no-cache');
     res.setHeader('Expires','0');
-    const fb = 250;
+    const fbEnabled = !!(cfg && cfg.fallback_enabled);
+    const fbConfigured = (cfg && typeof cfg.fallback_fee_hkd === 'number' && !Number.isNaN(cfg.fallback_fee_hkd)) ? cfg.fallback_fee_hkd : undefined;
+    const baseDefault = (cfg && typeof cfg.default_fee_hkd === 'number' && !Number.isNaN(cfg.default_fee_hkd)) ? cfg.default_fee_hkd : 0;
+    const fb = fbEnabled ? (typeof fbConfigured === 'number' ? fbConfigured : baseDefault) : baseDefault;
     const cents = Math.round(fb * 100);
     response.rates.push({ service_name: "ETC Shipping Fee", service_code: "ALTAYA_SHIPPING_DEFAULT", total_price: String(cents), currency: "HKD", min_delivery_date: minDate, max_delivery_date: maxDate });
     return res.json(response);

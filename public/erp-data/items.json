@@ -1,0 +1,11 @@
+{
+  "nextId": 2,
+  "rows": [
+    {
+      "sku": "ITEM1",
+      "name": "Item 1",
+      "uom": "EA",
+      "id": 1
+    }
+  ]
+}

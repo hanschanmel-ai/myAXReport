@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ai-erp-postgres
+    environment:
+      POSTGRES_USER: ai_erp
+      POSTGRES_PASSWORD: ai_erp_pw
+      POSTGRES_DB: ai_erp
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+  adminer:
+    image: adminer:latest
+    container_name: ai-erp-adminer
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+volumes:
+  pgdata:
